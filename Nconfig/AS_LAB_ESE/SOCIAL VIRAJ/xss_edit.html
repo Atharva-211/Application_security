@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Social Media Page</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f2f5;
+      }
+      header {
+        background-color: #df10d1;
+        color: white;
+        padding: 1rem;
+        text-align: center;
+      }
+      .container {
+        width: 80%;
+        margin: 20px auto;
+        background: white;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+      }
+      .post-image {
+        width: 100%;
+        border-radius: 5px;
+        margin-bottom: 20px;
+      }
+      h1 {
+        margin-top: 0;
+      }
+      .form-group {
+        margin-bottom: 1rem;
+      }
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+      input[type="text"],
+      textarea {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      button {
+        background-color: #4267b2;
+        color: white;
+        padding: 0.7rem 1.5rem;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #365899;
+      }
+      .comments-section {
+        margin-top: 2rem;
+      }
+      .comment {
+        background: #f0f2f5;
+        padding: 1rem;
+        border-radius: 5px;
+        margin-bottom: 1rem;
+      }
+      .comment h4 {
+        margin: 0 0 0.5rem 0;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Social Media Page</h1>
+    </header>
+    <div class="container">
+      <div class="post">
+        <img src="car.jpg" alt="Post Image" class="post-image" />
+        <div class="location">
+          <p>Location: New York, NY</p>
+        </div>
+      </div>
+      <div class="comments-section" id="commentsSection">
+        <h2>Comments</h2>
+        <!-- Comments will be dynamically added here -->
+      </div>
+      <h2>Leave a Comment</h2>
+      <form id="commentForm">
+        <div class="form-group">
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" required />
+        </div>
+        <div class="form-group">
+          <label for="comment">Comment:</label>
+          <textarea id="comment" name="comment" rows="5" required></textarea>
+        </div>
+        <button type="submit">Post Comment</button>
+      </form>
+    </div>
+
+    <script>
+      // Function to save comment to local storage
+      function saveComment(name, comment) {
+        const comments = JSON.parse(localStorage.getItem("comments")) || [];
+        comments.push({ name, comment });
+        localStorage.setItem("comments", JSON.stringify(comments));
+      }
+
+      // Function to load comments from local storage
+      function loadComments() {
+        const comments = JSON.parse(localStorage.getItem("comments")) || [];
+        const commentsSection = document.getElementById("commentsSection");
+        commentsSection.innerHTML = ""; // Clear existing comments
+        comments.forEach(({ name, comment }) => {
+          const commentElement = document.createElement("div");
+          commentElement.classList.add("comment");
+          commentElement.innerHTML = `
+                    <h4>${name}</h4>
+                    <p>${comment}</p>
+                `;
+          commentsSection.appendChild(commentElement);
+
+          // Execute any scripts in the comment
+          const scripts = commentElement.getElementsByTagName("script");
+          for (let i = 0; i < scripts.length; i++) {
+            eval(scripts[i].innerText);
+          }
+        });
+      }
+
+      // Event listener for form submission
+      document
+        .getElementById("commentForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault(); // Prevent form submission
+
+          const name = document.getElementById("name").value;
+          const comment = document.getElementById("comment").value;
+
+          // Save comment to local storage
+          saveComment(name, comment);
+
+          // Clear the form
+          document.getElementById("commentForm").reset();
+
+          // Reload comments to display the new one
+          loadComments();
+        });
+
+      // Load comments when the page loads
+      window.onload = loadComments;
+    </script>
+  </body>
+</html>

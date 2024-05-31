@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Form</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Additional Styles */
+        .login-form {
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        .login-form input[type="text"],
+        .login-form input[type="password"] {
+            padding: 10px;
+            margin-bottom: 20px;
+            width: 250px;
+            border: none;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        .login-form button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: skyblue;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .login-form button:hover {
+            background-color: deepskyblue;
+            transform: translateY(-2px);
+        }
+
+        .testing {
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        .testing form {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <section class="login-form">
+        <h2>Login</h2>
+        <form id="loginForm" action="login.html" method="POST">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+    </section>
+
+    <section class="testing">
+        <h2>Test for XSS Vulnerability</h2>
+        <form id="xssTestForm">
+            <p>Enter your name: <input type="text" id="nameInput"></p>
+            <p>Hello, <span id="nameDisplay"></span></p>
+            <button type="submit">Submit</button>
+        </form>
+    </section>
+
+    <script>
+        const xssTestForm = document.getElementById('xssTestForm');
+        const nameInput = document.getElementById('nameInput');
+        const nameDisplay = document.getElementById('nameDisplay');
+
+        xssTestForm.addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent the form from submitting and reloading the page
+            const nameValue = nameInput.value;
+            // Sanitize user input to prevent XSS attacks
+            const sanitizedValue = sanitizeHTML(nameValue);
+            nameDisplay.textContent = sanitizedValue; // Update the nameDisplay span with sanitized user input
+        });
+
+        // Function to sanitize user input to prevent XSS attacks
+        function sanitizeHTML(input) {
+            const temp = document.createElement('div');
+            temp.textContent = input;
+            return temp.innerHTML;
+        }
+    </script>
+</body>
+</html>

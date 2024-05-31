@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Web Page</title>
+    <style>
+        /* Reset and basic styles */
+        body, h1, h2, h3, p, ul, li {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+        header .logo h1 {
+            margin: 0;
+        }
+
+        nav ul {
+            display: flex;
+        }
+
+        nav ul li {
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #fff;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #aaa;
+        }
+
+        .login-button {
+            background-color: skyblue;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .login-button:hover {
+            background-color: deepskyblue;
+            transform: translateY(-2px);
+        }
+
+        main {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        .feed {
+            width: 70%;
+        }
+
+        .feed h2 {
+            margin-bottom: 20px;
+        }
+
+        .post {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .post:hover {
+            transform: translateY(-5px);
+        }
+
+        aside {
+            width: 25%;
+        }
+
+        aside section {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        aside h2 {
+            margin-bottom: 10px;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>SocialMedia</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Profile</a></li>
+                <li><a href="#">Messages</a></li>
+                <li><a href="#">Notifications</a></li>
+                <li><a href="login.html" class="login-button">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="feed">
+            <h2>News Feed</h2>
+            <div class="post">
+                <h3>John Doe</h3>
+                <p>This is a sample post on the social media feed.</p>
+            </div>
+            <div class="post">
+                <h3>Jane Smith</h3>
+                <p>Another example of a social media post.</p>
+            </div>
+            <!-- Add more posts as needed -->
+        </section>
+        <aside>
+            <section class="friends">
+                <h2>Friends</h2>
+                <ul>
+                    <li>Friend 1</li>
+                    <li>Friend 2</li>
+                    <li>Friend 3</li>
+                    <!-- Add more friends as needed -->
+                </ul>
+            </section>
+            <section class="messages">
+                <h2>Recent Messages</h2>
+                <ul>
+                    <li>Message from Friend 1</li>
+                    <li>Message from Friend 2</li>
+                    <li>Message from Friend 3</li>
+                    <!-- Add more messages as needed -->
+                </ul>
+            </section>
+        </aside>
+    </main>
+    <footer>
+        <p>&copy; 2024 SocialMedia. All rights reserved.</p>
+    </footer>
+</body>
+</html>

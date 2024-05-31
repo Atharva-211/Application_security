@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form Submission</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f4f4f4;
+      }
+      .container {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Form Submission</h1>
+      <p><strong>Name:</strong> <span id="display-name"></span></p>
+      <p><strong>Age:</strong> <span id="display-age"></span></p>
+      <p><strong>Product:</strong> <span id="display-product"></span></p>
+      <p><strong>Price:</strong> $<span id="display-price"></span></p>
+    </div>
+
+    <script>
+      function getQueryParameter(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+      }
+
+      document.getElementById("display-name").textContent =
+        getQueryParameter("name");
+      document.getElementById("display-age").textContent =
+        getQueryParameter("age");
+      document.getElementById("display-product").textContent =
+        getQueryParameter("product");
+      document.getElementById("display-price").textContent = parseFloat(
+        getQueryParameter("price")
+      ).toFixed(2);
+    </script>
+  </body>
+</html>

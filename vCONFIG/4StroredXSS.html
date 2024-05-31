@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Net Banking Web Page</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f2f5;
+      }
+      header {
+        background-color: #4267b2;
+        color: white;
+        padding: 1rem;
+        text-align: center;
+      }
+      .container {
+        width: 80%;
+        margin: 20px auto;
+        background: white;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+      }
+      h1 {
+        margin-top: 0;
+      }
+      .form-group {
+        margin-bottom: 1rem;
+      }
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+      input[type="text"],
+      input[type="email"] {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      button {
+        background-color: #4267b2;
+        color: white;
+        padding: 0.7rem 1.5rem;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #365899;
+      }
+      .comments-section {
+        margin-top: 2rem;
+      }
+      .comment {
+        background: #f0f2f5;
+        padding: 1rem;
+        border-radius: 5px;
+        margin-bottom: 1rem;
+      }
+      .comment h4 {
+        margin: 0 0 0.5rem 0;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Net Banking Web Page</h1>
+    </header>
+    <div class="container">
+      <h2>Money Transfer</h2>
+      <form id="moneyTransferForm">
+        <div class="form-group">
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" required />
+        </div>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+        <div class="form-group">
+          <label for="amount">Amount for Money Transfer:</label>
+          <input type="text" id="amount" name="amount" required />
+        </div>
+        <button type="submit">Transfer Money</button>
+      </form>
+      <div class="comments-section" id="commentsSection">
+        <h3>Transaction History</h3>
+      </div>
+    </div>
+
+    <script>
+      // Function to save transaction to local storage
+      function saveTransaction(name, email, amount) {
+        const transactions =
+          JSON.parse(localStorage.getItem("transactions")) || [];
+        transactions.push({ name, email, amount });
+        localStorage.setItem("transactions", JSON.stringify(transactions));
+      }
+
+      // Function to load and display transactions from local storage
+      function loadTransactions() {
+        const transactions =
+          JSON.parse(localStorage.getItem("transactions")) || [];
+        const commentsSection = document.getElementById("commentsSection");
+        transactions.forEach(({ name, email, amount }) => {
+          const transactionElement = document.createElement("div");
+          transactionElement.classList.add("comment");
+          transactionElement.innerHTML = `
+                    <h4>Transfer to: ${name} (${email})</h4>
+                    <p>Amount: $${amount}</p>
+                `;
+          commentsSection.appendChild(transactionElement);
+        });
+      }
+
+      // Event listener for form submission
+      document
+        .getElementById("moneyTransferForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault(); // Prevent form submission
+
+          const name = document.getElementById("name").value;
+          const email = document.getElementById("email").value;
+          const amount = document.getElementById("amount").value;
+
+          // Save transaction to local storage
+          saveTransaction(name, email, amount);
+
+          // Clear the form
+          document.getElementById("moneyTransferForm").reset();
+
+          // Reload transactions to display the new one
+          document.getElementById("commentsSection").innerHTML =
+            "<h3>Transaction History</h3>";
+          loadTransactions();
+        });
+
+      // Load transactions when the page loads
+      window.onload = loadTransactions;
+    </script>
+  </body>
+</html>

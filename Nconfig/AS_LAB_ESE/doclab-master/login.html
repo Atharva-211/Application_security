@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Testing</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f4f8;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 50px;
+            background-color: #005f73;
+            color: white;
+        }
+
+        .logo img {
+            height: 50px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+        }
+
+        .appointment button {
+            background-color: #0a9396;
+            border: none;
+            padding: 10px 20px;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .appointment button:hover {
+            background-color: #94d2bd;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero {
+            text-align: center;
+        }
+
+        .hero h1 {
+            color: #005f73;
+        }
+
+        .search {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .search input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px 0 0 5px;
+            width: 70%;
+        }
+
+        .search button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #0a9396;
+            color: white;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+        }
+
+        .search button:hover {
+            background-color: #94d2bd;
+        }
+
+        .testing {
+            margin-top: 50px;
+        }
+
+        .testing h2 {
+            color: #005f73;
+        }
+
+        .testing form {
+            margin-bottom: 20px;
+        }
+
+        .testing form p {
+            margin: 10px 0;
+        }
+
+        .testing form button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #0a9396;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .testing form button:hover {
+            background-color: #94d2bd;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="Doclab home">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Doctors</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="#">Blog</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="appointment">
+            <button>Make Appointment</button>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>Find Nearest Doctor.</h1>
+            <div class="search">
+                <input type="text" placeholder="Search doctors, clinics, hospitals, etc.">
+                <button>Find Now</button>
+            </div>
+        </section>
+
+        <section class="testing">
+            <h2>Test for XSS Vulnerability</h2>
+            <form id="xssTestForm">
+                <p>Enter your name: <input type="text" id="nameInput"></p>
+                <p>Hello, <span id="nameDisplay"></span></p>
+                <button type="submit">Submit</button>
+            </form>
+            
+           
+
+    <script>
+        const xssTestForm = document.getElementById('xssTestForm');
+        const nameInput = document.getElementById('nameInput');
+        const nameDisplay = document.getElementById('nameDisplay');
+
+        xssTestForm.addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent the form from submitting and reloading the page
+            const nameValue = nameInput.value;
+            nameDisplay.innerHTML = nameValue; // Update the nameDisplay span with user input
+        });
+
+        
+    </script>
+</body>
+</html>

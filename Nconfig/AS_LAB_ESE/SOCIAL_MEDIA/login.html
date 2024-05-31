@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Form</title>
+    <link rel="stylesheet" type="text/css" href="style1.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Login</h1>
+        <form action="" method = "GET">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <button type="submit" class="btn">Login</button>
+			
+        </form>
+    </div>
+    <script src="script.js"></script>
+	<h2>Test for XSS Vulnerability</h2>
+        <form id="xssTestForm">
+            <p>Enter your name: <input type="text" id="nameInput"></p>
+            <p>Hello, <span id="nameDisplay"></span></p>
+            <button type="submit">Submit</button>
+        </form>
+		<script>
+        const xssTestForm = document.getElementById('xssTestForm');
+        const nameInput = document.getElementById('nameInput');
+        const nameDisplay = document.getElementById('nameDisplay');
+
+        function sanitizeHTML(str) {
+            var temp = document.createElement('div');
+            temp.textContent = str;
+            return temp.innerHTML;
+        }
+
+        xssTestForm.addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent the form from submitting and reloading the page
+            const nameValue = sanitizeHTML(nameInput.value);
+            nameDisplay.innerHTML = nameValue; // Update the nameDisplay span with sanitized user input
+        });
+    </script>
+</body>
+</html>
